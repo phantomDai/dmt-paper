@@ -6,8 +6,10 @@
 传统的蜕变测试技术：随机选择测试用例随机选择蜕变关系
 """
 from myutl.Utl import Utl
+from utl.Utl import execute_utl
 
 import random
+import time
 
 
 class MT_random_random(object):
@@ -17,6 +19,8 @@ class MT_random_random(object):
 
     #获取测试用例与蜕变关系的映射关系,键是测试用例的编号，值是可以作用的蜕变关系列表
     test_case_2_MRs = {}
+
+    exec_utl = execute_utl()
 
     def __init__(self):
         """
@@ -33,27 +37,34 @@ class MT_random_random(object):
         :return:
         """
 
-        #　产生分区编号的候选序列
-        self.generate_random_partition_index(seed)
+        started_selecting_all_time = int(round(time.time() * 1000))
+        #获取由指定种子产生的一系列随机值，作为选择的测试用例的编号
+        random_list = exec_utl.generate_random_number(seed)
+        ended_selecting_all_time = int(round(time.time() * 1000))
 
-        # record the times of chosing partitions
-        counter = 0
+        # 选择测试用例需要的总时间
+        selecting_all_test_cases_time = ended_selecting_all_time - started_selecting_all_time
 
-        # the flag
-        flag = True
 
-        while flag:
-            # chose a partition
-            partition_index = self.sequence_partition_indexs[counter]
+        #开始遍历测试用例
+        for test_case_index in random_list:
 
-            # chose a test case
-            sub_set_chosed_partition = self.partition_info[str(partition_index)]
-            test_case_index = sub_set_chosed_partition[random.randint(len(sub_set_chosed_partition))]
+            # 获取正则表达式
+            source_pattern = test_cases[test_case_index]
 
-            # get concrete test case
-            pattern = self.test_cases[test_case_index]
+            # 获取该正则表达式可以作用的蜕变关系的集合，然后随机选择一个蜕变关系
+            MRs = self.exec_utl.get_test_case_MR_list(test_case_index)
 
-            #
+            #randomly select a MR
+            selected_MR = self.exec_utl.random_select_MR(MRs)
+
+            # 获取衍生测试用例
+            follow_pattern = self.exec_utl.generate_follow_test_case(selected_MR,
+                                                                     source_pattern, test_case_index)
+
+            
+
+
 
 
         

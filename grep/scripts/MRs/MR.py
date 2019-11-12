@@ -353,6 +353,37 @@ class MR12(MR):
 
 
 
+class MR_factory(object):
+    """
+    蜕变关系工厂，根据ＭＲ的名字返回相应的对象
+    """
+
+    def choose_MR(self, MR_name):
+        if MR_name == 'MR1':
+            return MR1()
+        elif MR_name == 'MR2':
+            return MR2()
+        elif MR_name == 'MR3':
+            return MR3()
+        elif MR_name == 'MR4':
+            return MR4()
+        elif MR_name == 'MR5':
+            return MR5()
+        elif MR_name == 'MR6':
+            return MR6()
+        elif MR_name == 'MR7':
+            return MR7()
+        elif MR_name == 'MR8':
+            return MR8()
+        elif MR_name == 'MR9':
+            return MR9()
+        elif MR_name == 'MR10':
+            return MR10()
+        elif MR_name == 'MR11':
+            return MR11()
+        else:
+            return MR12()
+
 
 if __name__ == '__main__':
     mr = MR7()
