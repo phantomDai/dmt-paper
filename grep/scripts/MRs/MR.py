@@ -22,7 +22,7 @@ class MR(metaclass=abc.ABCMeta):
 
 
     @abc.abstractmethod
-    def verify_results(self, mutant_name, testing_index):
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
         raise Exception('You must reimplement this method')
 
 """
@@ -47,14 +47,14 @@ class MR1(MR):
         follow_up_test_case = source_test_case.replace(range_character_set, modified_character_set)
         return follow_up_test_case
 
-    def verify_results(self, mutant_name, testing_index):
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
         """
         验证原始测试用例与衍生测试用例的执行结果
-        :param mutant_name: 执行的变异体的名字
+        :param repetitive_index: 重复实验的编号
         :param testing_index: 执行的测试序号（执行了第几个测试用例）
         :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
         """
-        return self.verify_results(mutant_name, testing_index)
+        return self.mr_utl.verify_equal(repetitive_index, testing_index, mutant_name)
 
 """
 the implemention of MR2
@@ -82,14 +82,14 @@ class MR2(MR):
         return follow_up_test_case
 
 
-    def verify_results(self, mutant_name, testing_index):
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
         """
         验证原始测试用例与衍生测试用例的执行结果
-        :param mutant_name: 执行的变异体的名字
+        :param repetitive_index: 重复实验的编号
         :param testing_index: 执行的测试序号（执行了第几个测试用例）
         :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
         """
-        return self.verify_results(mutant_name, testing_index)
+        return self.mr_utl.verify_equal(repetitive_index, testing_index, mutant_name)
 
 """
 the implemention of MR3
@@ -112,9 +112,14 @@ class MR3(MR):
         follow_up_test_case = source_test_case.replace(range_character_set, new_case)
         return follow_up_test_case
 
-    def verify_results(self, mutant_name, testing_index):
-
-        return self.mr_utl.verify_equal(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_equal(repetitive_index, testing_index, mutant_name)
 
 """
 the implemention of MR4
@@ -141,9 +146,14 @@ class MR4(MR):
         return source_test_case.replace(old_range_character_set_str, new_range_character_set_str)
 
 
-    def verify_results(self, mutant_name, testing_index):
-
-        return self.mr_utl.verify_equal(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_equal(repetitive_index, testing_index, mutant_name)
 
 
 
@@ -164,9 +174,14 @@ class MR5(MR):
         return '[' + ''.join(c for c in new_order) + ']'
 
 
-    def verify_results(self, mutant_name, testing_index):
-
-        return self.mr_utl.verify_appertain(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_appertain(repetitive_index, testing_index, mutant_name)
 
 
 """
@@ -186,9 +201,14 @@ class MR6(MR):
         return '|'.join(c for c in new_order)
 
 
-    def verify_results(self, mutant_name, testing_index):
-
-        return self.mr_utl.verify_appertain(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_appertain(repetitive_index, testing_index, mutant_name)
 
 
 """
@@ -213,8 +233,14 @@ class MR7(MR):
 
         return source_test_case.replace(old_range_character_set_str, new_range_character_set_str)
 
-    def verify_results(self, mutant_name, testing_index):
-        return self.mr_utl.verify_includ(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_includ(repetitive_index, testing_index, mutant_name)
 
 
 """
@@ -239,8 +265,14 @@ class MR8(MR):
 
         return source_test_case.replace(old_range_character_set_str, new_range_character_set_str)
 
-    def verify_results(self, mutant_name, testing_index):
-        return self.mr_utl.verify_appertain(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_appertain(repetitive_index, testing_index, mutant_name)
 
 
 """
@@ -257,8 +289,14 @@ class MR9(MR):
         """
         return source_test_case + "|[[:digit:]]"
 
-    def verify_results(self, mutant_name, testing_index):
-        return self.mr_utl.verify_result_MR9(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_result_MR9(repetitive_index, testing_index, mutant_name)
 
 
 """
@@ -275,16 +313,22 @@ class MR10(MR):
         """
         candidate_literals = ['{1}', '+']
 
-        normal_literals_path = os.path.join(parent_path, 'MR10Relation', 'normal_literals')
+        normal_literals_path = os.path.join(os.path.abspath('..'), 'MR10Relation', 'normal_literals')
 
-        normal_literals = tool.get_line_content(normal_literals_path, int(source_test_case_index))
+        normal_literals = self.tool.get_line_content(normal_literals_path, int(source_test_case_index))
 
         new_normal_literals = normal_literals + candidate_literals[random.randint(0, 1)]
 
         return  source_test_case.replace(normal_literals, new_normal_literals)
 
-    def verify_results(self, mutant_name, testing_index):
-        return self.mr_utl.verify_equal(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_equal(repetitive_index, testing_index, mutant_name)
 
 
 """
@@ -320,8 +364,28 @@ class MR11(MR):
         return source_test_case.replace(old_value, new_value)
 
 
-    def verify_results(self, mutant_name, testing_index):
-        return self.mr_utl.verify_result_MR9(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+
+        pass
+
+    def verify_MR11_results(self, repetitive_index, testing_index, test_case_index, mutant_name):
+        """
+        由于该ＭＲ需要特定的目标文件才能验证测试结果，因此需要目标问津的编号，该编号对应测试用例的编号
+        :param repetitive_index:　重复试验的额编号
+        :param testing_index:　测试编号
+        :param test_case_index:　测试用例的编号
+        :return:　是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+
+        return self.mr_utl.verify_result_MR11(repetitive_index, testing_index, test_case_index, mutant_name)
+
+
 
 """
 the implemention of MR12
@@ -338,8 +402,8 @@ class MR12(MR):
         @return: 衍生测试用例
         """
         #获取原始测试用例中的正常字符
-        normal_literals_path = os.path.join(parent_path, 'MR12Relation', 'normal_literals')
-        normal_literal = tool.get_line_content(normal_literals_path, int(source_test_case_index))
+        normal_literals_path = os.path.join(os.path.abspath('..'), 'MR12Relation', 'normal_literals')
+        normal_literal = self.tool.get_line_content(normal_literals_path, int(source_test_case_index))
 
         new_normal_literal = ''
         for i in range(0, len(normal_literal)):
@@ -348,8 +412,14 @@ class MR12(MR):
         return source_test_case.replace(normal_literal, new_normal_literal)
 
 
-    def verify_results(self, mutant_name, testing_index):
-        return mr_utl.verify_appertain(mutant_name, testing_index)
+    def verify_results(self, repetitive_index, testing_index, mutant_name):
+        """
+        验证原始测试用例与衍生测试用例的执行结果
+        :param repetitive_index: 重复实验的编号
+        :param testing_index: 执行的测试序号（执行了第几个测试用例）
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        return self.mr_utl.verify_appertain(repetitive_index, testing_index, mutant_name)
 
 
 
@@ -383,6 +453,36 @@ class MR_factory(object):
             return MR11()
         else:
             return MR12()
+
+
+    def verify_result_no_MR11(self, MR_name, repetivite_index, testing_index, mutant_name):
+        if MR_name == 'MR1':
+            return MR1().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR2':
+            return MR2().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR3':
+            return MR3().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR4':
+            return MR4().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR5':
+            return MR5().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR6':
+            return MR6().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR7':
+            return MR7().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR8':
+            return MR8().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR9':
+            return MR9().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR10':
+            return MR10().verify_results(repetivite_index, testing_index, mutant_name)
+        elif MR_name == 'MR12':
+            return MR12().verify_results(repetivite_index, testing_index, mutant_name)
+        else:
+            pass
+
+    def verify_MR11_result(self, repetitive_index, testing_index, test_case_index, mutant_name):
+        return MR11().verify_MR11_results(repetitive_index, testing_index, test_case_index, mutant_name)
 
 
 if __name__ == '__main__':

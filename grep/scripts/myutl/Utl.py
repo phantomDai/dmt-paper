@@ -159,7 +159,7 @@ class Utl(object):
         从partition_scheme_testcases_1.2中获取测试用例,索引是行号
         :return:
         """
-        file_path = os.path.join(os.getcwd('..'), 'files', 'partition_scheme_testcases_1.2')
+        file_path = os.path.join(os.path.abspath('..'), 'files', 'partition_scheme_testcases_1.2')
         testcases = []
         testcases.append('Null')
         with open(file_path, 'r') as file:
@@ -210,7 +210,7 @@ class Utl(object):
 
         test_case_2_MRs = {}
 
-        file_path = os.path.join(os.getcwd('..'), 'mapping relation', 'testcase_2_MRs')
+        file_path = os.path.join(os.path.abspath('..'), 'mapping relation', 'testcase_2_MRs')
 
         with open(file_path, 'r') as file:
             for aline in file:

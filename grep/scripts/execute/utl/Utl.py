@@ -2,6 +2,7 @@ import numpy as np
 import os
 from myutl.Utl import Utl
 from MRs.MR import *
+import linecache
 
 class execute_utl(object):
 	"""
@@ -19,7 +20,7 @@ class execute_utl(object):
 		#设置随机数的种子
 		# start_time = int(round(time.time() * 1000))
 		np.random.seed(seed)
-		random_list = [np.random.randint(1, 101194) for i in range(1000000)]
+		random_list = [np.random.randint(1, 101194) for i in range(100)]
 
 		# ended_time = int(round(time.time() * 1000))
 		return random_list
@@ -28,16 +29,16 @@ class execute_utl(object):
 	def get_test_case_MR_list(self, test_case_index):
 		"""
 		获取测试用例所有可能作用的蜕变关系
-		:test_case_index是测试用例的编号
+		:test_case_index是测试用例的编号 (int)
 		"""
 		test_cases_2_mrs_path = os.path.join(self.mapping_relation_path, 'testcase_2_MRs')
 
 		#读取一行的内容
-		line_content = self.tool.get_line_content(test_cases_2_mrs_path, int(test_case_index))
+		aline = linecache.getline(test_cases_2_mrs_path, int(test_case_index))
+		aline = aline.replace('\'', '').replace('\'', '').strip().split(':')[1].replace('[', '').replace(']', '')
+		MRs = aline.split(', ')
 
-		#将MR的信息存入list中
-
-		return line_content.split(':')[1].replace('[', '').replace(']', '').split(', ')
+		return MRs
 
 
 	def random_select_MR(self, MR_list):
@@ -46,6 +47,7 @@ class execute_utl(object):
 		:param MR_list:
 		:return: the name of selected MR
 		"""
+
 		return MR_list[np.random.randint(0, len(MR_list))]
 
 	def generate_follow_test_case(self, MR_name, source_test_case, source_test_case_index):
@@ -59,20 +61,16 @@ class execute_utl(object):
 		MR_obj = factory.choose_MR(MR_name)
 		return MR_obj.generate_follow_test_case(source_test_case, source_test_case_index)
 
+	def verify_result_not_MR11(self, MR_name, repetivite_index, testing_index, mutant_name):
+		return MR_factory().verify_result_no_MR11(MR_name, repetivite_index, testing_index, mutant_name)
 
-
-
-
-
-
-
-
-
+	def verify_result_MR11(self, repetitive_index, testing_index, test_case_index):
+		return MR_factory().verify_MR11_result(repetitive_index, testing_index, test_case_index)
 
 
 
 
 if __name__ == '__main__':
 	utl = execute_utl()
-	print(utl.get_test_case_MR_list('1'))
+	print(utl.get_test_case_MR_list(98540))
 	# utl.generate_random_number(1)

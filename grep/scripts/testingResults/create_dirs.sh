@@ -1,6 +1,6 @@
-#/bin/bash!
+#!/bin/bash
 
-for((i=1;i<=20;i++));
+for((i=1;i<=30;i++));
 do
-    mkdir ./mutant${i}
+  mkdir ./repetitive"${i}"
 done

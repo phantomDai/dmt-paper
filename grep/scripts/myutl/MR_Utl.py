@@ -32,16 +32,16 @@ class MyUtl(object):
 
 
 
-    def verify_equal(self, mutant_name, testing_index):
+    def verify_equal(self, repetitive_index, testing_index, mutant_name):
 
         """
         验证原始测试用例与衍生测试用例的执行结果
-        :param mutant_name: 执行的变异体的名字
+        :param repetitive_index: 重复试验的编号
         :param testing_index: 执行的测试序号（执行了第几个测试用例）
         :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
         """
-        shell_command = 'diff ../testingResults/' + mutant_name + '/' + testing_index + '_source ../testingResults/' + \
-                        mutant_name + '/' + testing_index + '_follow'
+        shell_command = 'diff ../testingResults/repetitive' + repetitive_index + '/' + testing_index + '_source_' + mutant_name + \
+                        ' ../testingResults/' + '/repetitive' + repetitive_index + '/' + testing_index + '_follow_' + mutant_name
 
         result = os.popen(shell_command).read()
 
@@ -50,15 +50,15 @@ class MyUtl(object):
         else:
             return True
 
-    def verify_appertain(self, muant_name, testing_index):
+    def verify_appertain(self, repetitive_index, testing_index, mutant_name):
         """
         验证原始测试用例的执行结果是否都出现在衍生测试用例的结果中
-        :param muant_name: 执行的变异体的名字
+        :param repetitive_index: 重复实验的编号
         :param testing_index: 执行的测试序号（执行了第几个测试用例）
         :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
         """
-        source_result_path = os.path.join(os.path.abspath('..'), 'testingResults', muant_name, testing_index + '_source')
-        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', muant_name, testing_index + '_follow')
+        source_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index, testing_index + '_source_' + mutant_name)
+        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index, testing_index + '_follow' + mutant_name)
 
         flag = False
 
@@ -74,17 +74,17 @@ class MyUtl(object):
         return flag
 
 
-    def verify_includ(self, mutant_name, testing_index):
+    def verify_includ(self, repetitive_index, testing_index, mutant_name):
         """
         验证原始测试用例的执行结果是否包含衍生测试用例的结果
-        :param muant_name: 执行的变异体的名字
+        :param repetitive_index: 重复实验的编号
         :param testing_index: 执行的测试序号（执行了第几个测试用例）
         :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
         """
-        source_result_path = os.path.join(os.path.abspath('..'), 'testingResults', muant_name,
-                                          testing_index + '_source')
-        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', muant_name,
-                                          testing_index + '_follow')
+        source_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
+                                          testing_index + '_source_' + mutant_name)
+        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
+                                          testing_index + '_follow_' + mutant_name)
         flag = False
 
         with open(follow_result_path, 'r') as source_file:
@@ -99,44 +99,106 @@ class MyUtl(object):
         return flag
 
 
-    def verify_result_MR9(self, mutant_name, testing_index):
+    def verify_result_MR9(self, repetitive_index, testing_index, mutant_name):
         """
-        验证MR9的执行结果：原始测试用例的执行结果出现在衍生测试用例的执行结果中，并且包含２１８１１１
-        :param mutant_name:
-        :param testing_index:
-        :return:
+        验证MR10的执行结果：原始测试用例的执行结果出现在衍生测试用例的执行结果中，并且包含２１８１１１
+        :param repetitive_index:　重复实验的编号
+        :param testing_index:　测试用力执行的个数
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
         """
-        source_result_path = os.path.join(os.path.abspath('..'), 'testingResults', muant_name,
-                                          testing_index + '_source')
-        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', muant_name,
-                                          testing_index + '_follow')
+        source_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
+                                          testing_index + '_source_' + mutant_name)
+        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
+                                          testing_index + '_follow_' + mutant_name)
 
         flag = False
+        source_results = []
+        follow_results = []
 
-        with open(source_result_path, 'r') as source_file:
-            for line in source_file:
+        if os.path.getsize(source_result_path) != 0:
+            with open(source_result_path, 'r') as source_file:
+                for aline in source_file:
+                    source_results.append(aline)
+            source_file.close()
+
+            if os.path.getsize(follow_result_path) == 0:
+                flag = True
+            else:
                 with open(follow_result_path, 'r') as follow_file:
-                    if '218111' not in follow_file.readlines():
-                        flag = True
-                        break
-                    if line.strip() not in follow_file.readlines():
-                        flag = True
-                        break
+                    for aline in follow_file:
+                        follow_results.append(aline)
                 follow_file.close()
-        source_file.close()
 
+            if '218111\n' not in follow_results:
+                flag = True
+            else:
+                for aline in source_results:
+                    if aline not in follow_results:
+                        flag = True
+                    else:
+                        pass
+        else:
+            if os.path.getsize(follow_result_path) == 0:
+                flag = True
+            else:
+                if '218111\n' not in follow_results:
+                    flag = True
+                else:
+                    pass
         return flag
 
 
-    def verify_MR10(self, mutant_name, testing_index):
+    def verify_result_MR11(self, repetitive_index, testing_index, test_case_index, mutant_name):
         """
-        验证ＭＲ１１的测试结果，该测试结果需要根据特殊的输入文件进行确定，特殊的输入文件存放在名为“ｔａｒｇｅｔFiles”
-        的目录中，该目录包含两部分的内容：file.test和该ＭＲ用到的目标文件：
+        验证MR11的执行结果：原始测试用例的执行结果出现在衍生测试用例的执行结果中
+        :param repetitive_index:　重复实验的编号
+        :param testing_index:　测试用力执行的个数
+        :param test_case_index: the index of test case
+        :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
+        """
+        source_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
+                                          testing_index + '_source_' + mutant_name)
+        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
+                                          testing_index + '_follow_' + mutant_name)
 
-        :param mutant_name:
-        :param testing_index:
-        :return:
-        """
+        target_file_path = os.path.join(os.path.abspath('..'), 'targetFiles', 'MR11_' + test_case_index)
+
+        # 出现以下任意一种情况，则表明违反了蜕变关系：（１）原始和衍生测试用例的执行结果一样；（２）原始测试
+        # 用例和衍生测试用例的结果加起来和目标文件不一样
+        target_file_content = []
+        with open(target_file_path, 'r') as file:
+            for aline in file:
+                target_file_content.append(aline)
+        file.close()
+
+        source_result = []
+
+        with open(source_result_path, 'r') as file:
+            for aline in file:
+                source_result.append(aline)
+        file.close()
+
+        follow_result = []
+
+        with open(follow_result_path, 'r') as file:
+            for aline in file:
+                source_result.append(aline)
+        file.close()
+
+        # 判断原始结果与衍生结果是否相等
+        if len(source_result) != 1 or len(follow_result) != 1:
+            return True
+        elif source_result[0] == follow_result[0]:
+            return True
+        elif len(source_result) + len(follow_result) != len(target_file_content):
+            return True
+        elif source_result[0] not in target_file_content or follow_result[0] not in target_file_content:
+            return True
+        else:
+            return False
+
+
+
 
 
 
