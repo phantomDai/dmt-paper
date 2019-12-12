@@ -35,4 +35,7 @@ class F(object):
 
         return np.var(self.F_measures)
 
+    def get_all_F(self):
+        return self.F_measures
+
 

@@ -38,5 +38,14 @@ class F2time(object):
     def get_F2_execute_average(self):
         return np.mean(self.F2_execute_test_case_time)
 
-    def get_F2_generate_variance(self):
+    def get_F2_execute_variance(self):
         return np.var(self.F2_execute_test_case_time)
+
+    def get_F2_all_select(self):
+        return self.F2_select_test_case_time
+
+    def get_F2_all_generate(self):
+        return self.F2_generate_test_case_time
+
+    def get_F2_all_execute(self):
+        return self.F2_execute_test_case_time

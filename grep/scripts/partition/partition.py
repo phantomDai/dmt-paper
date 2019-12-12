@@ -8,8 +8,7 @@ We combine choices with different categories belonged to the group A.
 """
 import os
 
-import constant.constantNumber as cons
-
+import constant.constantNumber as constant
 
 
 def partition_step_one():
@@ -31,7 +30,8 @@ def partition_step_one():
             # a temp array
             temp_choices = line.strip().split(";")
             # replace choices that not belong to the group a with '#'
-            modify_temp_choices = [ele if ele in considered_choices else '#' for ele in temp_choices]
+            modify_temp_choices = [
+                ele if ele in considered_choices else '#' for ele in temp_choices]
             new_test_frame = ';'.join(ele for ele in modify_temp_choices)
 
             new_test_frame_list.append(new_test_frame)
@@ -71,7 +71,8 @@ def delete_invalide_testframes():
     """
     new_testframes = []
 
-    invalide_indexs = [18, 71, 168, 197, 214, 255, 257, 277, 299, 335, 355, 543, 598, 609, 647, 672, 732]
+    invalide_indexs = [18, 71, 168, 197, 214, 255, 257,
+                       277, 299, 335, 355, 543, 598, 609, 647, 672, 732]
 
     with open('partition_scheme_testframes_1.1', 'r') as file_testframes:
         counter = 1
@@ -110,7 +111,6 @@ def delete_invalide_testframes():
     write_result('TestFrames_grep_no_repeat_1.2', new_testframes_star)
 
 
-
 def partition_step_two():
     """
     忽略选项的顺序
@@ -125,11 +125,13 @@ def partition_step_two():
 
     # 存放所有的测试帧的选项
     choices = []
+    final_scheme = []
 
     with open('partition_scheme_testframes_1.2', 'r') as temp_file:
         counter = 1
         for temp_line in temp_file:
             temp_choices = temp_line.strip().split(';')
+            temp_list = [ele for ele in temp_choices if ele != '#']
             temp_set = set(ele for ele in temp_choices if ele != '#')
 
             if temp_set in choices:
@@ -138,19 +140,18 @@ def partition_step_two():
                 continue
             else:
                 choices.append(temp_set)
+                final_scheme.append(temp_list)
                 counter = counter + 1
     temp_file.close()
 
     partition_scheme = []
-    for aSet in choices:
+    for aSet in final_scheme:
         temp_str = ';'.join(ele for ele in aSet)
         partition_scheme.append(temp_str)
     write_result('partition_scheme', partition_scheme)
 
 
-
 def write_result(file_name, li=[]):
-
     """
     write elements to file
     :param file_name: file name
@@ -158,7 +159,7 @@ def write_result(file_name, li=[]):
     :return:
     """
 
-    file_path = os.path.join(cons.partition_dir_path, file_name)
+    file_path = os.path.join(constant.partition_dir_path, file_name)
 
     new_file = open(file_path, 'w+')
 
@@ -174,4 +175,3 @@ def write_result(file_name, li=[]):
 # identify_test_frames()
 # delete_invalide_testframes()
 partition_step_two()
-

@@ -40,6 +40,16 @@ class MyUtl(object):
         :param testing_index: 执行的测试序号（执行了第几个测试用例）
         :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
         """
+        source_file = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index, testing_index + '_source_' + mutant_name)
+        follow_file = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index, testing_index + '_follow_' + mutant_name)
+
+
+
+        if not os.path.exists(source_file) or not os.path.exists(follow_file):
+            return False
+        else:
+            pass
+
         shell_command = 'diff ../testingResults/repetitive' + repetitive_index + '/' + testing_index + '_source_' + mutant_name + \
                         ' ../testingResults/' + '/repetitive' + repetitive_index + '/' + testing_index + '_follow_' + mutant_name
 
@@ -58,17 +68,32 @@ class MyUtl(object):
         :return: 是否揭示了故障：Ｔｒｕｅ，表示揭示故障；Ｆａｌｓｅ表示没有揭示故障
         """
         source_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index, testing_index + '_source_' + mutant_name)
-        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index, testing_index + '_follow' + mutant_name)
+        follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index, testing_index + '_follow_' + mutant_name)
+
+        if not os.path.exists(source_result_path) or not os.path.exists(follow_result_path):
+            return False
+        else:
+            pass
+
+        if os.path.getsize(source_result_path) == 0 and os.path.getsize(follow_result_path) == 0:
+            return False
+
+
+
+
 
         flag = False
 
+        follow_content = []
+        with open(follow_result_path, 'r') as follow_file:
+            for aline in follow_file:
+                follow_content.append(aline)
+
         with open(source_result_path, 'r') as source_file:
             for line in source_file:
-                with open(follow_result_path, 'r') as follow_file:
-                    if line.strip() not in follow_file.readlines():
-                        flag = True
-                        break
-                follow_file.close()
+                if line not in follow_content:
+                    flag = True
+                    break
         source_file.close()
 
         return flag
@@ -85,12 +110,26 @@ class MyUtl(object):
                                           testing_index + '_source_' + mutant_name)
         follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
                                           testing_index + '_follow_' + mutant_name)
+
+        if not os.path.exists(source_result_path) or not os.path.exists(follow_result_path):
+            return False
+        else:
+            pass
+
+
+        if os.path.getsize(source_result_path) == 0 and os.path.getsize(follow_result_path) == 0:
+            return False
+
+
+
+
+
         flag = False
 
-        with open(follow_result_path, 'r') as source_file:
-            for line in source_file:
-                with open(source_result_path, 'r') as follow_file:
-                    if line.strip() not in follow_file.readlines():
+        with open(follow_result_path, 'r') as follow_file:
+            for line in follow_file:
+                with open(source_result_path, 'r') as source_file:
+                    if line.strip() not in source_file.readlines():
                         flag = True
                         break
                 source_file.close()
@@ -110,6 +149,12 @@ class MyUtl(object):
                                           testing_index + '_source_' + mutant_name)
         follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
                                           testing_index + '_follow_' + mutant_name)
+
+        if not os.path.exists(source_result_path) or not os.path.exists(follow_result_path):
+            return False
+        else:
+            pass
+
 
         flag = False
         source_results = []
@@ -141,6 +186,10 @@ class MyUtl(object):
             if os.path.getsize(follow_result_path) == 0:
                 flag = True
             else:
+                with open(follow_result_path, 'r') as follow_file:
+                    for aline in follow_file:
+                        follow_results.append(aline)
+                follow_file.close()
                 if '218111\n' not in follow_results:
                     flag = True
                 else:
@@ -160,6 +209,12 @@ class MyUtl(object):
                                           testing_index + '_source_' + mutant_name)
         follow_result_path = os.path.join(os.path.abspath('..'), 'testingResults', 'repetitive' + repetitive_index,
                                           testing_index + '_follow_' + mutant_name)
+
+        if not os.path.exists(source_result_path) or not os.path.exists(follow_result_path):
+            return False
+        else:
+            pass
+
 
         target_file_path = os.path.join(os.path.abspath('..'), 'targetFiles', 'MR11_' + test_case_index)
 
@@ -182,7 +237,7 @@ class MyUtl(object):
 
         with open(follow_result_path, 'r') as file:
             for aline in file:
-                source_result.append(aline)
+                follow_result.append(aline)
         file.close()
 
         # 判断原始结果与衍生结果是否相等
@@ -208,4 +263,5 @@ class MyUtl(object):
 
 if __name__ == '__main__':
     utl = MyUtl()
-    print(utl.verify_appertain('mutant1', '1'))
+    # print(utl.verify_appertain('mutant1', '1'))
+    print(utl.get_range_charaters_MR1(r"\<\s|\d(^[[:alnum:]])(\b.\b)\2\!(\W+)([^6-8])"))

@@ -40,8 +40,16 @@ class Ftime(object):
     def get_F_execute_average(self):
         return np.mean(self.F_execute_test_case_time)
 
-    def get_F_generate_variance(self):
+    def get_F_execute_variance(self):
         return np.var(self.F_execute_test_case_time)
 
+    def get_all_F_select(self):
+        return self.F_select_test_case_time
+
+    def get_all_F_generate(self):
+        return self.F_generate_test_case_time
+
+    def get_all_F_execute(self):
+        return self.F_execute_test_case_time
 
 

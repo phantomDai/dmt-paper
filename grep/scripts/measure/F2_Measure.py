@@ -26,3 +26,6 @@ class F2(object):
 
         return np.var(self.F2_measure)
 
+    def get_all_F2(self):
+        return self.F2_measure
+

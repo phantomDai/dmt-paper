@@ -12,6 +12,7 @@ import random
 
 from myutl.MR_Utl import MyUtl
 from myutl.Utl import Utl
+import linecache
 
 
 class MR(metaclass=abc.ABCMeta):
@@ -41,7 +42,11 @@ class MR1(MR):
         range_character_set = self.mr_utl.get_range_charaters_MR1(source_test_case)
         min_value = ord(range_character_set.replace('[', '').replace(']', '').split('-')[0])
         max_value = ord(range_character_set.replace('[', '').replace(']', '').split('-')[1])
-        valid_characters = shuffle([chr(asc) for asc in range(min_value, max_value + 1)])
+        valid_asc_characters = [e for e in range(min_value, max_value + 1)]
+
+        shuffle(valid_asc_characters)
+
+        valid_characters = [chr(item) for item in valid_asc_characters]
         modified_character_set = ''.join(ele for ele in valid_characters)
         modified_character_set = '[' + modified_character_set + ']'
         follow_up_test_case = source_test_case.replace(range_character_set, modified_character_set)
@@ -74,7 +79,11 @@ class MR2(MR):
         min_value = ord(range_character_set.replace('[', '').replace(']', '').split('-')[0])
         max_value = ord(range_character_set.replace('[', '').replace(']', '').split('-')[1])
 
-        valid_characters = shuffle([chr(asc) for asc in range(min_value, max_value + 1)])
+        valid_asc_characters = [e for e in range(min_value, max_value + 1)]
+
+        shuffle(valid_asc_characters)
+
+        valid_characters = [chr(item) for item in valid_asc_characters]
 
         modified_character_set = '|'.join(ele for ele in valid_characters)
         follow_up_test_case = source_test_case.replace(range_character_set, modified_character_set)
@@ -313,9 +322,9 @@ class MR10(MR):
         """
         candidate_literals = ['{1}', '+']
 
-        normal_literals_path = os.path.join(os.path.abspath('..'), 'MR10Relation', 'normal_literals')
+        normal_literals_path = os.path.join(os.path.abspath('..'), 'mapping relation', 'MR10Relation','normal_literals')
 
-        normal_literals = self.tool.get_line_content(normal_literals_path, int(source_test_case_index))
+        normal_literals = linecache.getline(normal_literals_path, int(source_test_case_index)).strip()
 
         new_normal_literals = normal_literals + candidate_literals[random.randint(0, 1)]
 
@@ -360,8 +369,10 @@ class MR11(MR):
             if valid_choices[index] in source_test_case:
                 old_value = valid_choices[index]
                 new_value = a_dict[valid_choices[index]]
+                break
+        follow_test_case = source_test_case.replace(old_value, new_value)
 
-        return source_test_case.replace(old_value, new_value)
+        return follow_test_case
 
 
     def verify_results(self, repetitive_index, testing_index, mutant_name):
@@ -402,7 +413,7 @@ class MR12(MR):
         @return: 衍生测试用例
         """
         #获取原始测试用例中的正常字符
-        normal_literals_path = os.path.join(os.path.abspath('..'), 'MR12Relation', 'normal_literals')
+        normal_literals_path = os.path.join(os.path.abspath('..'), 'mapping relation', 'MR12Relation', 'normal_literals')
         normal_literal = self.tool.get_line_content(normal_literals_path, int(source_test_case_index))
 
         new_normal_literal = ''
@@ -486,7 +497,7 @@ class MR_factory(object):
 
 
 if __name__ == '__main__':
-    mr = MR7()
-    print(mr.generate_follow_test_case(r"\<[1-3]\>"))
+    mr = MR10()
+    print(mr.generate_follow_test_case(r"usr/bin/nohup?", '223'))
     # print(mr.verify_results('mutant1', '1'))
 
